@@ -39,5 +39,11 @@ export default defineConfig({
       testDir: './tests/UI',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'chromatic',
+      testDir: './tests/chromatic',
+      testMatch: '**/*.{spec,stories}.ts',
+      use: { ...devices['Desktop Chrome'] },
+    },
   ],
 });

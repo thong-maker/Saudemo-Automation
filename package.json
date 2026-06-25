@@ -11,18 +11,18 @@
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report",
-    "chromatic": "chromatic",
+    "chromatic": "chromatic --playwright",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
+    "@chromatic-com/playwright": "^0.14.10",
     "@playwright/test": "^1.50.0",
     "@types/node": "^22.10.0",
     "axe-core": "^4.10.2",
     "chromatic": "^11.22.0",
     "dotenv": "^16.4.7",
     "typescript": "^5.7.2"
-  },
-  "dependencies": {}
+  }
 }

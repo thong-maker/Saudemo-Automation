@@ -13,7 +13,7 @@
  * See: https://www.chromatic.com/docs/playwright
  */
 
-import { test } from '@playwright/test';
+import { test } from '@chromatic-com/playwright';
 
 test.describe('Chromatic Visual Snapshots', () => {
   test('Login page', async ({ page }) => {
