@@ -35,6 +35,7 @@ test.describe('Chromatic Visual Snapshots', () => {
     await page.getByTestId('password').fill('secret_sauce');
     await page.getByTestId('login-button').click();
     await page.waitForURL('**/inventory.html');
+    await page.addStyleTag({ content: '.inventory_item_price { color: red; font-size: 24px; }' });
     await page.waitForLoadState('networkidle');
   });
 
