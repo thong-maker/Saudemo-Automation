@@ -15,10 +15,13 @@
 
 import { test } from '@chromatic-com/playwright';
 
+// Demo change: header bar turned orange to simulate a UI regression
+const DEMO_CSS = `.app_logo { color: darkorange; } .header_label { color: darkorange; }`;
+
 test.describe('Chromatic Visual Snapshots', () => {
   test('Login page', async ({ page }) => {
     await page.goto('/');
-    // Chromatic captures snapshot automatically
+    await page.addStyleTag({ content: DEMO_CSS });
   });
 
   test('Login page – error state', async ({ page }) => {
@@ -27,6 +30,7 @@ test.describe('Chromatic Visual Snapshots', () => {
     await page.getByTestId('password').fill('bad_pass');
     await page.getByTestId('login-button').click();
     await page.waitForSelector('[data-test="error"]');
+    await page.addStyleTag({ content: DEMO_CSS });
   });
 
   test('Inventory page', async ({ page }) => {
@@ -35,8 +39,8 @@ test.describe('Chromatic Visual Snapshots', () => {
     await page.getByTestId('password').fill('secret_sauce');
     await page.getByTestId('login-button').click();
     await page.waitForURL('**/inventory.html');
-    await page.addStyleTag({ content: '.inventory_item_price { color: red; font-size: 24px; }' });
     await page.waitForLoadState('networkidle');
+    await page.addStyleTag({ content: DEMO_CSS });
   });
 
   test('Cart page', async ({ page }) => {
@@ -48,6 +52,7 @@ test.describe('Chromatic Visual Snapshots', () => {
     await page.getByTestId('add-to-cart-sauce-labs-backpack').click();
     await page.locator('.shopping_cart_link').click();
     await page.waitForURL('**/cart.html');
+    await page.addStyleTag({ content: DEMO_CSS });
   });
 
   test('Checkout step 1', async ({ page }) => {
@@ -60,6 +65,7 @@ test.describe('Chromatic Visual Snapshots', () => {
     await page.locator('.shopping_cart_link').click();
     await page.getByTestId('checkout').click();
     await page.waitForURL('**/checkout-step-one.html');
+    await page.addStyleTag({ content: DEMO_CSS });
   });
 
   test('Checkout complete', async ({ page }) => {
@@ -77,5 +83,6 @@ test.describe('Chromatic Visual Snapshots', () => {
     await page.getByTestId('continue').click();
     await page.getByTestId('finish').click();
     await page.waitForURL('**/checkout-complete.html');
+    await page.addStyleTag({ content: DEMO_CSS });
   });
 });
