@@ -1,0 +1,63 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main, 'feature/**']
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 22 * * 1-5'   # Nightly Mon–Fri
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Playwright (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.50.0-jammy
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [e2e-chromium, e2e-firefox, e2e-webkit, api, accessibility]
+    env:
+      HOME: /root
+      BASE_URL: https://www.saucedemo.com
+      STANDARD_USER: standard_user
+      STANDARD_PASSWORD: secret_sauce
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Playwright – ${{ matrix.project }}
+        run: npx playwright test --project=${{ matrix.project }}
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: playwright-report/
+          retention-days: 30
+
+  chromatic:
+    name: Chromatic Visual Regression
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # Required for Chromatic baseline
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Chromatic
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitZeroOnChanges: true
+          onlyChanged: true

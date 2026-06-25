@@ -1,0 +1,28 @@
+{
+  "name": "saudemo-automation",
+  "version": "1.0.0",
+  "description": "Playwright automation suite for saucedemo.com – E2E, API, Accessibility, Visual Regression",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test --project=e2e",
+    "test:api": "playwright test --project=api",
+    "test:accessibility": "playwright test --project=accessibility",
+    "test:visual": "playwright test --project=visual",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "chromatic": "chromatic",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.10.0",
+    "axe-core": "^4.10.2",
+    "chromatic": "^11.22.0",
+    "dotenv": "^16.4.7",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {}
+}

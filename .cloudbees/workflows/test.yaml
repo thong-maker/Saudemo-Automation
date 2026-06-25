@@ -1,0 +1,83 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: Saudemo Regression Tests
+
+on:
+  # Manual trigger from CloudBees dashboard
+  workflow_dispatch:
+
+  # Auto-run on push to main / feature branches
+  push:
+    branches:
+      - main
+      - 'feature/**'
+      - 'fix/**'
+
+  # Scheduled nightly regression run
+  schedule:
+    - cron: '0 22 * * 1-5'   # 22:00 UTC Mon–Fri
+
+jobs:
+  # ──────────────────────────────────────────────
+  # E2E + API + Accessibility Regression Tests
+  # ──────────────────────────────────────────────
+  regression:
+    name: Regression Tests
+    steps:
+      - name: Check out code
+        uses: cloudbees-io/checkout@v1
+
+      - name: Run Playwright Tests
+        # Official Playwright image – Chromium, Firefox, WebKit pre-installed
+        uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
+        run: |
+          # Firefox requires HOME=/root inside container
+          export HOME=/root
+          npm ci
+          npm run test:e2e
+          npm run test:api
+          npm run test:accessibility
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: cloudbees-io/upload-artifact@v1
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  # ──────────────────────────────────────────────
+  # Visual Regression via Chromatic
+  # ──────────────────────────────────────────────
+  visual:
+    name: Visual Regression (Chromatic)
+    needs: regression
+    steps:
+      - name: Check out code
+        uses: cloudbees-io/checkout@v1
+
+      - name: Run Chromatic
+        uses: docker://node:20-slim
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        run: |
+          export HOME=/root
+          npm ci
+          npx chromatic --exit-zero-on-changes
+
+  # ──────────────────────────────────────────────
+  # Full Suite (scheduled / manual only)
+  # ──────────────────────────────────────────────
+  full-suite:
+    name: Full Cross-Browser Suite
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+    steps:
+      - name: Check out code
+        uses: cloudbees-io/checkout@v1
+
+      - name: Run All Tests (all browsers + mobile)
+        uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
+        run: |
+          export HOME=/root
+          npm ci
+          npm test

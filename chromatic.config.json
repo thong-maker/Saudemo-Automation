@@ -1,0 +1,9 @@
+{
+  "$schema": "https://www.chromatic.com/config-file.json",
+  "projectId": "your-chromatic-project-id",
+  "buildScriptName": "chromatic",
+  "onlyChanged": true,
+  "exitZeroOnChanges": true,
+  "externals": ["public/**"],
+  "skip": "dependabot/**"
+}
