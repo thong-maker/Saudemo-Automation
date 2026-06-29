@@ -36,7 +36,7 @@ jobs:
       - name: Run Chromatic
         uses: docker://node:20-slim
         env:
-          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          CHROMATIC_PROJECT_TOKEN: chpt_3a991d9490011ab
         run: |
           export HOME=/root
           npm ci
