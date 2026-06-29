@@ -34,4 +34,5 @@ jobs:
         run: |
           export HOME=/root
           git config --global --add safe.directory /cloudbees/workspace
+          npx playwright test --project=chromatic || true
           npm run chromatic -- --exit-zero-on-changes || true
