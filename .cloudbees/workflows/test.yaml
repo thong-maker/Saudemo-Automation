@@ -39,5 +39,6 @@ jobs:
           CHROMATIC_PROJECT_TOKEN: chpt_3a991d9490011ab
         run: |
           export HOME=/root
+          git config --global --add safe.directory /cloudbees/workspace
           npm ci
-          npx chromatic --exit-zero-on-changes
+          npx chromatic@latest --exit-zero-on-changes
