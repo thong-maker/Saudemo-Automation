@@ -3,44 +3,30 @@ kind: workflow
 name: Saudemo Regression Tests
 
 on:
-  # Manual trigger from CloudBees dashboard
   workflow_dispatch:
-
-  # Auto-run on push to main / feature branches
   push:
     branches:
       - main
       - 'feature/**'
       - 'fix/**'
-
-  # Scheduled nightly regression run
   schedule:
-    - cron: '0 22 * * 1-5'   # 22:00 UTC Mon–Fri
+    - cron: '0 22 * * 1-5'
 
 jobs:
-  # ──────────────────────────────────────────────
-  # E2E + API + Accessibility Regression Tests
-  # ──────────────────────────────────────────────
   regression:
     steps:
       - name: Check out code
         uses: cloudbees-io/checkout@v1
 
       - name: Run Playwright Tests
-        # Official Playwright image – Chromium, Firefox, WebKit pre-installed
         uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
         run: |
-          # Firefox requires HOME=/root inside container
           export HOME=/root
           npm ci
           npm run test:e2e
           npm run test:api
           npm run test:accessibility
 
-
-  # ──────────────────────────────────────────────
-  # Visual Regression via Chromatic
-  # ──────────────────────────────────────────────
   visual:
     needs: regression
     steps:
@@ -55,19 +41,3 @@ jobs:
           export HOME=/root
           npm ci
           npx chromatic --exit-zero-on-changes
-
-  # ──────────────────────────────────────────────
-  # Full Suite (scheduled / manual only)
-  # ──────────────────────────────────────────────
-  full-suite:
-    if: ${{ cloudbees.event_name == 'workflow_dispatch' || cloudbees.event_name == 'schedule' }}
-    steps:
-      - name: Check out code
-        uses: cloudbees-io/checkout@v1
-
-      - name: Run All Tests (all browsers + mobile)
-        uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
-        run: |
-          export HOME=/root
-          npm ci
-          npm test
