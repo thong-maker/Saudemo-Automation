@@ -34,7 +34,7 @@ jobs:
         uses: cloudbees-io/checkout@v1
 
       - name: Run Chromatic
-        uses: docker://node:20-slim
+        uses: docker://node:20
         env:
           CHROMATIC_PROJECT_TOKEN: chpt_3a991d9490011ab
         run: |
