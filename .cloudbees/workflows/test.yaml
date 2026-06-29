@@ -22,7 +22,6 @@ jobs:
   # E2E + API + Accessibility Regression Tests
   # ──────────────────────────────────────────────
   regression:
-    name: Regression Tests
     steps:
       - name: Check out code
         uses: cloudbees-io/checkout@v1
@@ -50,7 +49,6 @@ jobs:
   # Visual Regression via Chromatic
   # ──────────────────────────────────────────────
   visual:
-    name: Visual Regression (Chromatic)
     needs: regression
     steps:
       - name: Check out code
@@ -69,8 +67,7 @@ jobs:
   # Full Suite (scheduled / manual only)
   # ──────────────────────────────────────────────
   full-suite:
-    name: Full Cross-Browser Suite
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+    if: ${{ cloudbees.event_name == 'workflow_dispatch' || cloudbees.event_name == 'schedule' }}
     steps:
       - name: Check out code
         uses: cloudbees-io/checkout@v1
