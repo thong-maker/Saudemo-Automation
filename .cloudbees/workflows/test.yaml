@@ -41,4 +41,4 @@ jobs:
           export HOME=/root
           git config --global --add safe.directory /cloudbees/workspace
           npm ci
-          npx chromatic@latest --exit-zero-on-changes
+          npm run chromatic -- --exit-zero-on-changes
