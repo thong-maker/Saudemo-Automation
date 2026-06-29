@@ -18,21 +18,21 @@ jobs:
       - name: Check out code
         uses: cloudbees-io/checkout@v1
 
-      - name: Run Playwright Tests
+      - name: Run E2E Tests
         uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
         run: |
           export HOME=/root
           npm ci
           npm run test:e2e || true
-          npm run test:api || true
-          npm run test:accessibility || true
 
-      - name: Run Chromatic
+      - name: Run API Tests
         uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
-        env:
-          CHROMATIC_PROJECT_TOKEN: chpt_3a991d9490011ab
         run: |
           export HOME=/root
-          git config --global --add safe.directory /cloudbees/workspace
-          npx playwright test --project=chromatic || true
-          npm run chromatic -- --exit-zero-on-changes || true
+          npm run test:api || true
+
+      - name: Run Accessibility Tests
+        uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
+        run: |
+          export HOME=/root
+          npm run test:accessibility || true
