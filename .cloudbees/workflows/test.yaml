@@ -37,13 +37,6 @@ jobs:
           npm run test:api
           npm run test:accessibility
 
-      - name: Upload Playwright Report
-        if: always()
-        uses: cloudbees-io/upload-artifact@v1
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
 
   # ──────────────────────────────────────────────
   # Visual Regression via Chromatic
