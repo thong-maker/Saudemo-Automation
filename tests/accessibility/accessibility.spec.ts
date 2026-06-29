@@ -44,9 +44,6 @@ test.describe('Accessibility Tests – @axe-core/playwright', () => {
 
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-        // Known saucedemo.com bug: sort dropdown missing accessible name (select-name)
-        // This is an intentional defect in the demo site — excluded from automated check
-        .disableRules(['select-name'])
         .analyze();
 
       const critical = results.violations.filter(v => v.impact === 'critical');
