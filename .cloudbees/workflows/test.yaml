@@ -12,7 +12,7 @@ on:
       - 'fix/**'
 
   schedule:
-    - cron: '0 22 * * 1-5'   # 22:00 UTC Mon–Fri
+    - cron: '0 22 * * 1-5'   # 22:00 UTC Mon–Fri (nightly)
 
 jobs:
   regression:
