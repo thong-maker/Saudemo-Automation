@@ -4,13 +4,15 @@ name: Saudemo Regression Tests
 
 on:
   workflow_dispatch:
+
   push:
     branches:
       - main
       - 'feature/**'
       - 'fix/**'
+
   schedule:
-    - cron: '0 22 * * 1-5'
+    - cron: '0 22 * * 1-5'   # 22:00 UTC Mon–Fri
 
 jobs:
   regression:
@@ -18,21 +20,11 @@ jobs:
       - name: Check out code
         uses: cloudbees-io/checkout@v1
 
-      - name: Run E2E Tests
+      - name: Run Playwright Tests
         uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
         run: |
           export HOME=/root
           npm ci
-          npm run test:e2e || true
-
-      - name: Run API Tests
-        uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
-        run: |
-          export HOME=/root
-          npm run test:api || true
-
-      - name: Run Accessibility Tests
-        uses: docker://mcr.microsoft.com/playwright:v1.50.0-jammy
-        run: |
-          export HOME=/root
-          npm run test:accessibility || true
+          npm run test:e2e
+          npm run test:api
+          npm run test:accessibility
