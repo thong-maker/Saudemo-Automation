@@ -13,7 +13,10 @@
     "test:report": "playwright show-report",
     "chromatic": "chromatic --playwright",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:browserstack": "browserstack-node-sdk playwright test --project=e2e",
+    "test:browserstack:all": "browserstack-node-sdk playwright test --project=e2e --project=api --project=accessibility",
+    "test:bs": "playwright test --config=playwright.browserstack.config.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
@@ -21,6 +24,7 @@
     "@playwright/test": "^1.50.0",
     "@types/node": "^22.10.0",
     "axe-core": "^4.10.2",
+    "browserstack-node-sdk": "^1.59.0",
     "chromatic": "^11.22.0",
     "dotenv": "^16.4.7",
     "typescript": "^5.7.2"
