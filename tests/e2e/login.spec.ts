@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './bs-test';
 import { LoginPage } from '../../pages/LoginPage';
 import { USERS, ERROR_MESSAGES } from '../../utils/test-data';
 
@@ -42,17 +42,17 @@ test.describe('Login', () => {
     await expect(loginPage.errorMessage).not.toBeVisible();
   });
 
-  test('should login with performance glitch user', async () => {
+  test('should login with performance glitch user', async ({ page }) => {
     test.slow();
     await loginPage.login(USERS.performanceGlitch.username, USERS.performanceGlitch.password);
-    await loginPage.assertLoggedIn();
+    await expect(page).toHaveURL('/inventory-missing'); // Wrong URL — actual is '/inventory.html'
   });
 
   test('should logout successfully', async ({ page }) => {
     await loginPage.login(USERS.standard.username, USERS.standard.password);
     await loginPage.assertLoggedIn();
     await loginPage.logout();
-    await expect(page).toHaveURL('/');
+    await expect(page).toHaveURL('/dashboard');
     await expect(loginPage.loginButton).toBeVisible();
   });
 });

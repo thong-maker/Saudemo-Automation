@@ -9,6 +9,7 @@ export default defineConfig({
     ['html', { outputFolder: 'playwright-report' }],
     ['json', { outputFile: 'reports/test-results.json' }],
     ['list'],
+    ['./reporters/bug-report.ts'],
   ],
   use: {
     baseURL: process.env.BASE_URL || 'https://www.saucedemo.com',

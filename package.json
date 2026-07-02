@@ -26,6 +26,7 @@
     "axe-core": "^4.10.2",
     "browserstack-node-sdk": "^1.59.0",
     "chromatic": "^11.22.0",
+    "docx": "^9.7.1",
     "dotenv": "^16.4.7",
     "typescript": "^5.7.2"
   }
